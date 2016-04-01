@@ -22,22 +22,70 @@
 			return parseInt(this, 10);
 		};
 
+		//Model
+		function SalaryCalculator(){
+			//this.basic = 0;
+
+			var _basic = 0;
+			this.onBasicChange = null;
+			this.getBasic = function(){
+				return _basic;
+			};
+
+			this.setBasic = function(value){
+				if (_basic === value) return;
+				_basic = value;
+				//trigger change notification for basic
+				if (typeof this.onBasicChange === 'function')
+					this.onBasicChange();
+			}
+
+			this.hra = 0;
+			this.da = 0;
+			this.tax = 0;
+			this.salary = 0;
+
+			this.onSalaryChange = null;
+		}
+		SalaryCalculator.prototype.calculate = function(){
+			var gross = this.getBasic() + this.hra + this.da;
+			var net = gross * ((100-this.tax)/100);
+			this.salary = net;
+			if (typeof this.onSalaryChange === 'function')
+				this.onSalaryChange();
+		}
+
+		//View
 		$(document).ready(function(){
+			window.calculator = new SalaryCalculator();
+
+			$("#txtBasic").change(function(){
+				calculator.setBasic($("#txtBasic").val().toInt());
+			});
+			$("#txtHra").change(function(){
+				calculator.hra = $("#txtHra").val().toInt();
+			});
+			$("#txtDa").change(function(){
+				calculator.da = $("#txtDa").val().toInt();
+			});
+			$("#rangeTax").change(function(){
+				calculator.tax = $("#rangeTax").val().toInt();
+			});
 			$("#btnCalculate").click(function(){
-				var basic = $("#txtBasic").val().toInt(),
-					hra = $("#txtHra").val().toInt(),
-					da = $("#txtDa").val().toInt(),
-					tax = $("#rangeTax").val().toInt();
-
-				var gross = basic + hra + da;
-				var net = gross * ((100-tax)/100);
-
-				$("#divResult").html(net);
+				calculator.calculate();
 			});
 
 			$("#rangeTax").change(function(){
 				$("#spanTax").html(this.value);
 			});
+
+			calculator.onSalaryChange = function(){
+				$("#divResult").html(calculator.salary);
+			};
+
+			calculator.onBasicChange = function(){
+				$("#txtBasic").val(calculator.getBasic());
+			};
 		});
 	</script>
 </head>
@@ -46,15 +94,15 @@
 	<hr>
 	<div class="content">
 		<div class="field">
-			<label for="">Basic :</label>
+			<label for="txtBasic" accesskey="b">Basic :</label>
 			<input type="number"  id="txtBasic">
 		</div>
 		<div class="field">
-			<label for="">HRA :</label>
+			<label for="txtHra" accesskey="h">HRA :</label>
 			<input type="number"  id="txtHra">
 		</div>
 		<div class="field">
-			<label for="">DA :</label>
+			<label for="txtDa" accesskey="a">DA :</label>
 			<input type="number"  id="txtDa">
 		</div>
 		<div class="field">
