@@ -37,6 +37,31 @@
 			this.salary = net;
 		}
 
+		function bindTwoWay(controlId, model){
+			$(controlId).change(function(){
+				scope.$apply(function(){
+					var expr = model + ' = ' + $(controlId).val().toInt();
+					scope.$eval(expr);
+				});
+			});
+			scope.$watch(model, function(newValue, oldValue){
+				$(controlId).val(newValue);
+			});
+		}
+
+		function bindClick(controlId, expr){
+			$(controlId).click(function(){
+				scope.$apply(function(){
+					scope.$eval(expr);
+				});
+			});
+		}
+
+		function bindOneWay(controlId, model){
+			scope.$watch(model, function(newValue, oldValue){
+				$(controlId).html(newValue);
+			});
+		}
 		//View
 		$(document).ready(function(){
 			
@@ -45,54 +70,17 @@
 				window.calculator = scope.calculator = new SalaryCalculator();	
 			});
 
-			//Reacting to user actions
-			$("#txtBasic").change(function(){
-				scope.$apply(function(){
-					calculator.basic = $("#txtBasic").val().toInt();
-				});
-			});
-			$("#txtHra").change(function(){
-				scope.$apply(function(){
-					calculator.hra = $("#txtHra").val().toInt();
-				});
-			});
-			$("#txtDa").change(function(){
-				scope.$apply(function(){
-					calculator.da = $("#txtDa").val().toInt();
-				});
-			});
-			$("#rangeTax").change(function(){
-				scope.$apply(function(){
-					calculator.tax = $("#rangeTax").val().toInt();
-				});
-			});
-			$("#btnCalculate").click(function(){
-				scope.$apply(function(){
-					calculator.calculate();
-				});
-			});
+			
+			bindTwoWay("#txtBasic", "calculator.basic");
+			bindTwoWay("#txtHra", "calculator.hra");
+			bindTwoWay("#txtDa", "calculator.da");
+			bindTwoWay("#rangeTax", "calculator.tax");
+			
+			bindClick("#btnCalculate", "calculator.calculate()");
 
-		
-			//Reacting to model changes
-			scope.$watch('calculator.salary', function(newValue, oldValue){
-				$("#divResult").html(newValue);
-			});
-
-			scope.$watch('calculator.basic', function(newValue, oldValue){
-				$("#txtBasic").val(newValue);
-			});
-			scope.$watch('calculator.hra', function(newValue, oldValue){
-				$("#txtHra").val(newValue);
-			});
-			scope.$watch('calculator.da', function(newValue, oldValue){
-				$("#txtDa").val(newValue);
-			});
-			scope.$watch('calculator.tax', function(newValue, oldValue){
-				$("#rangeTax").val(newValue);
-			});
-			scope.$watch('calculator.tax', function(newValue, oldValue){
-				$("#spanTax").html(newValue);
-			});
+			bindOneWay("#divResult", "calculator.salary");
+			bindOneWay("#spanTax", "calculator.tax");
+			
 		});
 	</script>
 </head>
