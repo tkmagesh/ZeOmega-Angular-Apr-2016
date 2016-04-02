@@ -31,12 +31,13 @@
 		cursor: pointer;
 	}
 	</style>
+	<script src="angular.min.js"></script>
 	<script type="text/usecases">
-		1. List the bugs
-		2. Add a new bug
-		3. Toggle the closed status of a bug
-		4. Remove closed bugs
-		5. Display statistics
+		1. List the bugs - (done)
+		2. Add a new bug - (done)
+		3. Toggle the closed status of a bug - (done)
+		4. Remove closed bugs - (done)
+		5. Display statistics - (done)
 		6. Search for Bugs
 		7. Sort the bugs
 		8. Improvise the bug display
@@ -46,15 +47,71 @@
 		12. Implement Routing
 		13. Tests
 	</script>
+	<script>
+		var bugTrackerApp = angular.module("bugTrackerApp", []);
+		bugTrackerApp.factory("bugOperations", function bugOperationsFactory(){
+			return {
+				create : function(bugName){
+					return {
+						name : bugName,
+						isClosed : false
+					};
+				},
+				toggle : function(bug){
+					bug.isClosed = !bug.isClosed;
+				}
+			}
+		});
+		
+		bugTrackerApp.controller("bugsController", function($scope, bugOperations){
+			//var bugOperations = bugOperationsFactory();
+			$scope.bugs = [
+				{name : "Date formats are wrong", isClosed : false},
+				{name : "Server communication failure", isClosed : false},
+				{name : "Data validation fails", isClosed : false},
+				{name : "User authentication is erratic", isClosed : false},
+			];
+
+			$scope.getClosedCount = function(){
+				var result = 0;
+				for(var i=0; i<$scope.bugs.length; i++)
+					if ($scope.bugs[i].isClosed)
+						++result;
+				return result;
+			};
+
+			$scope.newBugName = '';
+
+			$scope.addNew = function(){
+				var newBug = bugOperations.create($scope.newBugName);
+				$scope.bugs.push(newBug);
+				$scope.newBugName = '';
+			};
+
+			$scope.toggle = function(bug){
+				bugOperations.toggle(bug);
+			};
+
+			$scope.removeClosed = function(){
+				for(var i = $scope.bugs.length-1; i>=0; i--)
+					if ($scope.bugs[i].isClosed)
+						$scope.bugs.splice(i,1);
+			};
+			/*$scope.selectedBug = '[Selected bug will be displayed here]';
+			$scope.setSelectedBug = function(bug){
+				$scope.selectedBug = bug;
+			}*/
+		})
+	</script>
 </head>
-<body>
+<body ng-app="bugTrackerApp">
 	<h1>Bug Tracker</h1>
 	<hr>
-	<div class="content">
+	<div class="content" ng-controller="bugsController">
 		<section class="stats">
-			<span class="closed">3</span>
+			<span class="closed">{{getClosedCount()}}</span>
 			<span> / </span>
-			<span>5</span>
+			<span>{{bugs.length}}</span>
 		</section>
 		<section class="search">
 			<label for="">Search :</label>
@@ -71,13 +128,20 @@
 		</section>
 		<section class="list">
 			<label for="">Bug Name :</label>
-			<input type="text" name="" id="">
-			<input type="button" value="Add New">
-			<input type="button" value="Remove Closed">
+			<input type="text" ng-model="newBugName">
+			<input type="button" value="Add New" ng-click="addNew()">
+			<input type="button" value="Remove Closed" ng-click="removeClosed()">
+			<!-- <input type="button" value="Set first selected" ng-click="selectedBug = bugs[0]"> -->
 			<ol>
-				<li><span class="bugName closed">This is a closed bug</span></li>
-				<li><span class="bugName">This is an open bug</span></li>
+				<li ng-repeat="bug in bugs">
+					<span class="bugName" ng-class="{closed :bug.isClosed}" ng-click="toggle(bug)">{{bug}}</span>
+				</li>
+				
+				
 			</ol>
+			<!-- <div style="position : absolute; top : 5px; right : 5px; border : 2px solid black; padding : 10px">
+				{{selectedBug}}
+			</div> -->
 		</section>
 	</div>
 </body>
