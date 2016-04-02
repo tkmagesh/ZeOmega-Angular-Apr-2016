@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bug Tracker</title>
+	<style>
+	section{
+		margin-bottom: 10px;
+	}
+	.closed{
+		color : red;
+		text-decoration: line-through;
+		font-style: italic;
+	}
+	.stats{
+		font-size: 18pt;
+	}
+	ol{
+		width : 400px;
+		list-style: none;
+	}
+	li{
+		margin-bottom: 5px;
+		border : 1px solid gray;
+		background-color: #e7e7e7;
+		padding : 5px;
+		border-radius: 5px;
+	}
+	.bugName{
+		font-size: 16pt;
+		cursor: pointer;
+	}
+	</style>
+	<script type="text/usecases">
+		1. List the bugs
+		2. Add a new bug
+		3. Toggle the closed status of a bug
+		4. Remove closed bugs
+		5. Display statistics
+		6. Search for Bugs
+		7. Sort the bugs
+		8. Improvise the bug display
+		9. Persist the bugs in the storage (localStorage)
+		10. Display 'createdAt'
+		11. Persist the bugs in the server
+		12. Implement Routing
+		13. Tests
+	</script>
+</head>
+<body>
+	<h1>Bug Tracker</h1>
+	<hr>
+	<div class="content">
+		<section class="stats">
+			<span class="closed">3</span>
+			<span> / </span>
+			<span>5</span>
+		</section>
+		<section class="search">
+			<label for="">Search :</label>
+			<input type="text" name="" id="">
+			<label for="">Closed ? :</label>
+			<input type="checkbox" name="" id="">
+			<input type="button" value="Show All">
+		</section>
+		<section class="sort">
+			<label for="">Order By :</label>
+			<input type="text" name="" id="">
+			<label for=""> Descending ? :</label>
+			<input type="checkbox" name="" id="">
+		</section>
+		<section class="list">
+			<label for="">Bug Name :</label>
+			<input type="text" name="" id="">
+			<input type="button" value="Add New">
+			<input type="button" value="Remove Closed">
+			<ol>
+				<li><span class="bugName closed">This is a closed bug</span></li>
+				<li><span class="bugName">This is an open bug</span></li>
+			</ol>
+		</section>
+	</div>
+</body>
+</html>
