@@ -49,9 +49,18 @@
 	</script>
 	<script>
 		var bugTrackerApp = angular.module("bugTrackerApp", []);
-		bugTrackerApp.factory("bugOperations", function bugOperationsFactory(){
+
+		/*bugTrackerApp.factory('defaultBugName', function(){
+			return "[Default Bug]";
+		});*/
+
+		bugTrackerApp.value("defaultBugName", "[Default Bug]");
+
+
+		bugTrackerApp.factory("bugOperations", function(defaultBugName){
 			return {
 				create : function(bugName){
+					bugName = bugName || defaultBugName;
 					return {
 						name : bugName,
 						isClosed : false
@@ -62,13 +71,13 @@
 				}
 			}
 		});
-		
+
 		bugTrackerApp.controller("bugsController", function($scope, bugOperations){
 			//var bugOperations = bugOperationsFactory();
 			$scope.bugs = [
-				{name : "Date formats are wrong", isClosed : false},
+				{name : "Date formats are wrong", isClosed : true},
 				{name : "Server communication failure", isClosed : false},
-				{name : "Data validation fails", isClosed : false},
+				{name : "Data validation fails", isClosed : true},
 				{name : "User authentication is erratic", isClosed : false},
 			];
 
@@ -97,6 +106,8 @@
 					if ($scope.bugs[i].isClosed)
 						$scope.bugs.splice(i,1);
 			};
+
+
 			/*$scope.selectedBug = '[Selected bug will be displayed here]';
 			$scope.setSelectedBug = function(bug){
 				$scope.selectedBug = bug;
@@ -115,16 +126,16 @@
 		</section>
 		<section class="search">
 			<label for="">Search :</label>
-			<input type="text" name="" id="">
+			<input type="text" ng-model="searchBug.name">
 			<label for="">Closed ? :</label>
-			<input type="checkbox" name="" id="">
-			<input type="button" value="Show All">
+			<input type="checkbox" data-ng-model="searchBug.isClosed">
+			<input type="button" value="Show All" ng-click="searchBug.isClosed = undefined">
 		</section>
 		<section class="sort">
 			<label for="">Order By :</label>
-			<input type="text" name="" id="">
+			<input type="text" ng-model="sortBug">
 			<label for=""> Descending ? :</label>
-			<input type="checkbox" name="" id="">
+			<input type="checkbox" ng-model="sortBugOrder">
 		</section>
 		<section class="list">
 			<label for="">Bug Name :</label>
@@ -133,7 +144,7 @@
 			<input type="button" value="Remove Closed" ng-click="removeClosed()">
 			<!-- <input type="button" value="Set first selected" ng-click="selectedBug = bugs[0]"> -->
 			<ol>
-				<li ng-repeat="bug in bugs">
+				<li ng-repeat="bug in (bugs | filter:searchBug | orderBy:sortBug:sortBugOrder)">
 					<span class="bugName" ng-class="{closed :bug.isClosed}" ng-click="toggle(bug)">{{bug}}</span>
 				</li>
 				
