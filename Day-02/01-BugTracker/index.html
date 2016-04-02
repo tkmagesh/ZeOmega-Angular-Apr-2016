@@ -38,10 +38,27 @@
 		3. Toggle the closed status of a bug - (done)
 		4. Remove closed bugs - (done)
 		5. Display statistics - (done)
-		6. Search for Bugs
-		7. Sort the bugs
-		8. Improvise the bug display
+		6. Search for Bugs - (done)
+		7. Sort the bugs - (done)
+		8. Improvise the bug display - (done)
 		9. Persist the bugs in the storage (localStorage)
+			window.localStorage
+			===================
+			1. key/value store
+			2. value should be string
+			apis
+			====
+				* setItem(key, value)
+				* getItem(key) //=> value
+				* removeItem(key)
+				* clear()
+				* key(index) //=> key at index
+				* length //=> number of items in storage
+
+			hint
+			====
+				* use angular.toJson() and angular.fromJson() for serialization and deserialization respectively
+				
 		10. Display 'createdAt'
 		11. Persist the bugs in the server
 		12. Implement Routing
@@ -81,13 +98,7 @@
 				{name : "User authentication is erratic", isClosed : false},
 			];
 
-			$scope.getClosedCount = function(){
-				var result = 0;
-				for(var i=0; i<$scope.bugs.length; i++)
-					if ($scope.bugs[i].isClosed)
-						++result;
-				return result;
-			};
+			$scope.getClosedCount = ;
 
 			$scope.newBugName = '';
 
@@ -112,7 +123,24 @@
 			$scope.setSelectedBug = function(bug){
 				$scope.selectedBug = bug;
 			}*/
-		})
+		});
+
+		bugTrackerApp.filter('closedCount', function(){
+			return function(bugs){
+				var result = 0;
+				for(var i=0; i<bugs.length; i++)
+					if (bugs[i].isClosed)
+						++result;
+				return result;
+			}
+		});
+
+		bugTrackerApp.filter('trimText', function(){
+			return function(text, trimLength){ /*actual filter function*/
+				var trimLength = trimLength || 20;
+				return text.length > trimLength ? text.substr(0,trimLength)+'...' : text;
+			};
+		});
 	</script>
 </head>
 <body ng-app="bugTrackerApp">
@@ -120,7 +148,7 @@
 	<hr>
 	<div class="content" ng-controller="bugsController">
 		<section class="stats">
-			<span class="closed">{{getClosedCount()}}</span>
+			<span class="closed">{{bugs | closedCount}}</span>
 			<span> / </span>
 			<span>{{bugs.length}}</span>
 		</section>
@@ -133,7 +161,10 @@
 		</section>
 		<section class="sort">
 			<label for="">Order By :</label>
-			<input type="text" ng-model="sortBug">
+			<select name="" id="" ng-model="sortBug">
+				<option value="name">Name</option>
+				<option value="isClosed">Status</option>
+			</select>
 			<label for=""> Descending ? :</label>
 			<input type="checkbox" ng-model="sortBugOrder">
 		</section>
@@ -145,7 +176,9 @@
 			<!-- <input type="button" value="Set first selected" ng-click="selectedBug = bugs[0]"> -->
 			<ol>
 				<li ng-repeat="bug in (bugs | filter:searchBug | orderBy:sortBug:sortBugOrder)">
-					<span class="bugName" ng-class="{closed :bug.isClosed}" ng-click="toggle(bug)">{{bug}}</span>
+					<span class="bugName" ng-class="{closed :bug.isClosed}" ng-click="toggle(bug)">
+						{{bug.name | trimText:30}}
+					</span>
 				</li>
 				
 				
