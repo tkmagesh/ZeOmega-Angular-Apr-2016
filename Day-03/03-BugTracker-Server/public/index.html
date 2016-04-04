@@ -96,27 +96,84 @@
 			}
 		});
 
-		
-		bugTrackerApp.controller("bugsController", function($scope, bugOperations){
+		bugTrackerApp.service("bugService", function($http, $q){
+			/*this.getAll = function(){
+				var deferred = $q.defer();
+				
+				var httpPromise = $http.get("http://localhost:4000/bugs");
+				httpPromise.then(function(response){
+					var result = response.data;
+					deferred.resolve(result);
+				});
+
+				return deferred.promise;
+			}*/
+
+			this.getAll = function(){
 			
-			$scope.bugs = [];
+				/*var httpPromise = $http.get("http://localhost:4000/bugs");
+				var resultPromise = httpPromise.then(function(response){
+					var result = response.data;
+					return result;
+				});
+
+				return resultPromise;*/
+
+				return $http
+					.get("http://localhost:4000/bugs")
+					.then(function(response){
+						return response.data;
+					});
+			};
+
+			this.save = function(bug){
+				var p = null;
+				if (bug.id){
+					p = $http.put("http://localhost:4000/bugs/" + bug.id, bug);
+				} else {
+					p = $http.post("http://localhost:4000/bugs", bug);
+				}
+				return p.then(function(response){
+					return response.data;
+				});
+			};
+
+			this.delete = function(bug){
+				return $http.delete("http://localhost:4000/bugs/" + bug.id);
+			}
+		})
+		
+		bugTrackerApp.controller("bugsController", function($scope, bugOperations, bugService){
+			
+			var p = bugService.getAll();
+			p.then(function(bugs){
+				$scope.bugs = bugs;
+			});
+
+			
+
 
 			$scope.newBugName = '';
 
 			$scope.addNew = function(){
-				var newBug = bugOperations.create($scope.newBugName);
-				$scope.bugs.push(newBug);
-				$scope.newBugName = '';
+				bugService
+					.save(bugOperations.create($scope.newBugName))
+					.then(function(bug){
+						$scope.bugs.push(bug);
+						$scope.newBugName = '';		
+					})
+				
 			};
 
 			$scope.toggle = function(bug){
 				bugOperations.toggle(bug);
+				bugService.save(bug);
 			};
 
 			$scope.removeClosed = function(){
 				for(var i = $scope.bugs.length-1; i>=0; i--)
 					if ($scope.bugs[i].isClosed){
-				
+						bugService.delete($scope.bugs[i]);
 						$scope.bugs.splice(i,1);
 					}
 			};
@@ -125,6 +182,7 @@
 		bugTrackerApp.filter('closedCount', function(){
 			return function(bugs){
 				var result = 0;
+				bugs = bugs || [];
 				for(var i=0; i<bugs.length; i++)
 					if (bugs[i].isClosed)
 						++result;

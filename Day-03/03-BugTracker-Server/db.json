@@ -1,12 +1,6 @@
 {
   "bugs": [
     {
-      "id": 4,
-      "name": "Textboxes are not aligned",
-      "isClosed": false,
-      "createdAt": "2016-02-03T04:06:33.548Z"
-    },
-    {
       "id": 5,
       "name": "Dates are not displayed",
       "isClosed": false,
@@ -29,6 +23,12 @@
       "name": "Loading data is not displayed",
       "isClosed": false,
       "createdAt": "2016-03-16T18:13:06.814Z"
+    },
+    {
+      "id": 10,
+      "name": "Another new bug",
+      "isClosed": false,
+      "createdAt": "2016-04-04T10:00:14.783Z"
     }
   ],
   "employees": [
