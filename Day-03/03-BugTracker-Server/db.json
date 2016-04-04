@@ -1,0 +1,44 @@
+{
+  "bugs": [
+    {
+      "id": 4,
+      "name": "Textboxes are not aligned",
+      "isClosed": false,
+      "createdAt": "2016-02-03T04:06:33.548Z"
+    },
+    {
+      "id": 5,
+      "name": "Dates are not displayed",
+      "isClosed": false,
+      "createdAt": "2016-02-03T04:19:34.764Z"
+    },
+    {
+      "id": 7,
+      "name": "JSON server is very slow",
+      "isClosed": false,
+      "createdAt": "2016-02-02T05:04:28.176Z"
+    },
+    {
+      "id": 8,
+      "name": "$http is not very dependable",
+      "isClosed": false,
+      "createdAt": "2016-02-03T06:51:10.288Z"
+    },
+    {
+      "id": 9,
+      "name": "Loading data is not displayed",
+      "isClosed": false,
+      "createdAt": "2016-03-16T18:13:06.814Z"
+    }
+  ],
+  "employees": [
+    {
+      "id": 1,
+      "name": "Magesh"
+    },
+    {
+      "id": 2,
+      "name": "Suresh"
+    }
+  ]
+}
