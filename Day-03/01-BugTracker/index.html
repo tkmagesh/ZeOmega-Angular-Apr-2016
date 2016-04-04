@@ -86,22 +86,22 @@
 			}
 		});
 
-		bugTrackerApp.factory("bugStorage", function(){
-			var maxBugId = -1,
+		/*bugTrackerApp.factory("bugStorage", function(){
+			var maxBugId = 0,
 				storage = window.localStorage;
 
 			function getAllBugs(){
 				var result = [];
 				for(var i=0; i<storage.length; i++){
 					var data = angular.fromJson(storage.getItem(storage.key(i)));
-					if (maxBugId < data) maxBugId = data.id;
+					if (maxBugId < data.id) maxBugId = data.id;
 					result.push(data);
 				}
 				return result;
 			}
 
 			function saveBug(bug){
-				if (bug.id === 0)
+				if (!bug.id)
 					bug.id = ++maxBugId;
 				storage.setItem(bug.id, angular.toJson(bug));
 				return bug;
@@ -115,6 +115,36 @@
 				save : saveBug,
 				remove : removeBug
 			};
+		});*/
+		bugTrackerApp.service("bugStorage", function(){
+			var maxBugId = 0,
+				storage = window.localStorage;
+
+			this.getAll = function getAllBugs(){
+				var result = [];
+				for(var i=0; i<storage.length; i++){
+					var data = angular.fromJson(storage.getItem(storage.key(i)));
+					if (maxBugId < data.id) maxBugId = data.id;
+					result.push(data);
+				}
+				return result;
+			};
+
+			this.save = function saveBug(bug){
+				if (!bug.id)
+					bug.id = ++maxBugId;
+				storage.setItem(bug.id, angular.toJson(bug));
+				return bug;
+			};
+
+			this.remove = function removeBug(bug){
+				storage.removeItem(bug.id);
+			}
+			/*return {
+				getAll : getAllBugs,
+				save : saveBug,
+				remove : removeBug
+			};*/
 		});
 
 		bugTrackerApp.controller("bugsController", function($scope, bugOperations, bugStorage){
