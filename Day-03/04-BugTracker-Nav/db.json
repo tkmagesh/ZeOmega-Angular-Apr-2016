@@ -1,0 +1,38 @@
+{
+  "bugs": [
+    {
+      "id": 7,
+      "name": "JSON server is very slow",
+      "isClosed": false,
+      "createdAt": "2016-02-02T05:04:28.176Z"
+    },
+    {
+      "id": 8,
+      "name": "$http is not very dependable",
+      "isClosed": false,
+      "createdAt": "2016-02-03T06:51:10.288Z"
+    },
+    {
+      "id": 9,
+      "name": "Loading data is not displayed",
+      "isClosed": false,
+      "createdAt": "2016-03-16T18:13:06.814Z"
+    },
+    {
+      "id": 10,
+      "name": "Adding a new bug",
+      "isClosed": false,
+      "createdAt": "2016-04-04T11:11:40.913Z"
+    }
+  ],
+  "employees": [
+    {
+      "id": 1,
+      "name": "Magesh"
+    },
+    {
+      "id": 2,
+      "name": "Suresh"
+    }
+  ]
+}
