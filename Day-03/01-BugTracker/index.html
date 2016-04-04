@@ -30,8 +30,12 @@
 		font-size: 16pt;
 		cursor: pointer;
 	}
+	.datetime{
+		font-style: italic;
+	}
 	</style>
 	<script src="angular.min.js"></script>
+	<script src="moment.js"></script>
 	<script type="text/usecases">
 		1. List the bugs - (done)
 		2. Add a new bug - (done)
@@ -41,7 +45,7 @@
 		6. Search for Bugs - (done)
 		7. Sort the bugs - (done)
 		8. Improvise the bug display - (done)
-		9. Persist the bugs in the storage (localStorage)
+		9. Persist the bugs in the storage (localStorage) - (done)
 			window.localStorage
 			===================
 			1. key/value store
@@ -64,8 +68,13 @@
 		12. Implement Routing
 		13. Tests
 	</script>
+
+	<script src="utils.js" type="text/javascript"></script>
+	
 	<script>
-		var bugTrackerApp = angular.module("bugTrackerApp", []);
+		
+
+		var bugTrackerApp = angular.module("bugTrackerApp", ["utils"]);
 
 		bugTrackerApp.value("defaultBugName", "[Default Bug]");
 
@@ -77,7 +86,8 @@
 					return {
 						id : 0,
 						name : bugName,
-						isClosed : false
+						isClosed : false,
+						createdAt : new Date()
 					};
 				},
 				toggle : function(bug){
@@ -116,9 +126,9 @@
 				remove : removeBug
 			};
 		});*/
-		bugTrackerApp.service("bugStorage", function(){
+		bugTrackerApp.service("bugStorage", function($window){
 			var maxBugId = 0,
-				storage = window.localStorage;
+				storage = $window.localStorage;
 
 			this.getAll = function getAllBugs(){
 				var result = [];
@@ -183,12 +193,7 @@
 			}
 		});
 
-		bugTrackerApp.filter('trimText', function(){
-			return function(text, trimLength){ /*actual filter function*/
-				var trimLength = trimLength || 20;
-				return text.length > trimLength ? text.substr(0,trimLength)+'...' : text;
-			};
-		});
+		
 	</script>
 </head>
 <body ng-app="bugTrackerApp">
@@ -227,6 +232,7 @@
 					<span class="bugName" ng-class="{closed :bug.isClosed}" ng-click="toggle(bug)">
 						{{bug.name | trimText:30}}
 					</span>
+					<div class="datetime">{{bug.createdAt | elapsed}}</div>
 				</li>
 				
 				
