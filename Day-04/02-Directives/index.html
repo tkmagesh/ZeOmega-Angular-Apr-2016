@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Angular Directives</title>
+	<script src="jquery-2.2.2.js"></script>
+	<script src="angular.min.js"></script>
+	<style>
+	.highlight{
+		color : red;
+		font-weight: bold;
+		font-size: 18pt;
+	}
+	div{
+		padding : 20px;
+	}
+	div span{
+		margin: 20px;
+	}
+	</style>
+	<script>
+		angular
+			.module("myApp", [])
+			.controller("testController", function($scope){
+				$scope.message = 'Welcome to the world of custom directives!';
+				$scope.onMessageClick = function(){
+					console.log('helloworld directie is clicked');
+				}
+			})
+			.directive("helloWorld", function(){
+				return {
+					restrict : 'A',
+					scope : {
+						"greetMessage" : '=',
+						"ok" : '&'
+					},
+					link : function($scope, $element, $attrs){
+						$scope.$watch("greetMessage", function(){
+							$element.html($scope.greetMessage);
+						});
+						$element.on("click", function(){
+							$scope.$apply(function(){
+								$scope.greetMessage = 'Hurray! I have been clicked';
+								$scope.ok();
+								$element.toggleClass("highlight");	
+							});
+							
+						});
+					}
+				};
+			});
+
+	</script>
+</head>
+<body ng-app="myApp" >
+	<div ng-controller="testController">
+		<span>{{message}}</span>
+		<input type="button" value="Clear" ng-click="message=''">
+		<hr>
+		<div hello-world greet-message="message" ok="onMessageClick()"></div>	
+	</div>
+</body>
+</html>

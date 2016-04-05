@@ -39,4 +39,35 @@ describe('my app', function() {
     });
 
   });
+
+  describe('greet', function() {
+
+    beforeEach(function() {
+      browser.get('index.html#/greet');
+    });
+
+
+    it('should render view2 when user navigates to /view2', function() {
+      expect(element.all(by.css('[ng-view] h3')).first().getText()).
+        toMatch(/Greeting App/);
+    });
+
+    it('should display the message when greeted', function(){
+      //Arrange
+        var txtName = element(by.model("name")),
+            btnGreet = element(by.buttonText("Greet")),
+            divMessage = element(by.binding("message")),
+            name = 'Magesh',
+            expectedMessage = 'Hi Magesh, Have a nice day!';
+
+      //Act
+        txtName.sendKeys(name);
+        btnGreet.click();
+        var actualMessage = divMessage.getText();
+
+      //Assert
+        expect(actualMessage).toBe(expectedMessage);
+    })
+
+  });
 });

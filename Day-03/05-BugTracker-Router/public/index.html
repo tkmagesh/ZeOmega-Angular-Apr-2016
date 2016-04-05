@@ -123,6 +123,15 @@
 
 		bugTrackerApp.controller("bugsNavController", function($scope){
 			
+		});
+
+		bugTrackerApp.directive("bugList", function(){
+			return {
+				scope : {
+					data : '='
+				},
+				templateUrl : 'templates/bugsDisplay.html'
+			}
 		})
 		
 	</script>

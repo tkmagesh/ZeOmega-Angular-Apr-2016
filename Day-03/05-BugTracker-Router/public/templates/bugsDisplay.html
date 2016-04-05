@@ -1,0 +1,17 @@
+<section class="list">
+	<input type="button" value="Remove Closed" ng-click="data.removeClosed()">
+	<ol>
+		<li ng-repeat="bug in (data.list | filter:searchBug | orderBy:sortBug:sortBugOrder)">
+			<span class="bugName" ng-class="{closed :bug.isClosed}" ng-click="data.toggle(bug)">
+				{{bug.name | trimText:30}}
+			</span>
+			<div class="datetime">{{bug.createdAt | elapsed}}</div>
+			<div><a href="#/detail/{{bug.id}}">Details</a></div>
+		</li>
+		
+		
+	</ol>
+	<!-- <div style="position : absolute; top : 5px; right : 5px; border : 2px solid black; padding : 10px">
+		{{selectedBug}}
+	</div> -->
+</section>

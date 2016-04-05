@@ -20,21 +20,5 @@
 		<label for=""> Descending ? :</label>
 		<input type="checkbox" ng-model="sortBugOrder">
 	</section>
-	<section class="list">
-		<input type="button" value="Remove Closed" ng-click="bugs.removeClosed()">
-		<ol>
-			<li ng-repeat="bug in (bugs.list | filter:searchBug | orderBy:sortBug:sortBugOrder)">
-				<span class="bugName" ng-class="{closed :bug.isClosed}" ng-click="bugs.toggle(bug)">
-					{{bug.name | trimText:30}}
-				</span>
-				<div class="datetime">{{bug.createdAt | elapsed}}</div>
-				<div><a href="#/detail/{{bug.id}}">Details</a></div>
-			</li>
-			
-			
-		</ol>
-		<!-- <div style="position : absolute; top : 5px; right : 5px; border : 2px solid black; padding : 10px">
-			{{selectedBug}}
-		</div> -->
-	</section>
+	<bug-list data='bugs'></bug-list>
 </div>

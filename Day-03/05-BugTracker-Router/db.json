@@ -3,7 +3,7 @@
     {
       "id": 7,
       "name": "JSON server is very slow",
-      "isClosed": false,
+      "isClosed": true,
       "createdAt": "2016-02-02T05:04:28.176Z"
     },
     {
